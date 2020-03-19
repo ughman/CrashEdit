@@ -66,6 +66,24 @@ namespace CrashEdit
             allentries = false;
             flipoctree = false;
         }
+        public ProtoZoneEntryViewer(List<ProtoZoneEntry> entries, ProtoSceneryEntry[] linkedsceneryentries, TextureChunk[][] texturechunks) : base(linkedsceneryentries, texturechunks)
+        {
+            this.entry = entries[0];
+            entries.Remove(this.entry);
+            this.linkedentries = entries.ToArray();
+            renderoctree = false;
+            octreedisplaylists = new int[linkedentries.Length + 1];
+            for (int i = 0; i < octreedisplaylists.Length; i++)
+            {
+                octreedisplaylists[i] = -1;
+            }
+            octreevalues = new Dictionary<short, Color>();
+            octreeselection = -1;
+            deletelists = false;
+            polygonmode = false;
+            allentries = false;
+            flipoctree = false;
+        }
 
         protected override IEnumerable<IPosition> CorePositions
         {

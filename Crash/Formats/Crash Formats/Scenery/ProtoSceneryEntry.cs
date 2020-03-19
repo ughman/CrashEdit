@@ -67,7 +67,7 @@ namespace Crash
             return new UnprocessedEntry(items,EID,Type);
         }
 
-        public byte[] ToOBJ()
+        public byte[] ToOBJ(int start = 0)
         {
             using (MemoryStream stream = new MemoryStream())
             {
@@ -82,7 +82,41 @@ namespace Crash
                     obj.WriteLine("# Polygons");
                     foreach (ProtoSceneryPolygon polygon in polygons)
                     {
-                        obj.WriteLine("f {0} {1} {2}", polygon.VertexA + 1, polygon.VertexB + 1, polygon.VertexC + 1);
+                        obj.WriteLine("f {0} {1} {2}", (polygon.VertexA + 1 + start), (polygon.VertexB + 1 + start) , (polygon.VertexC + 1 + start));
+                    }
+                }
+                return stream.ToArray();
+            }
+        }
+
+        public byte[] ToPLY(int start = 0)
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                using (StreamWriter ply = new StreamWriter(stream))
+                {
+                    ply.WriteLine("ply");
+                    ply.WriteLine("format ascii 1.0");
+                    ply.WriteLine("element vertex {0}", Vertices.Count);
+                    ply.WriteLine("property int x");
+                    ply.WriteLine("property int y");
+                    ply.WriteLine("property int z");
+                    ply.WriteLine("property uchar red");
+                    ply.WriteLine("property uchar green");
+                    ply.WriteLine("property uchar blue");
+                    ply.WriteLine("element face {0}", polygons.Count);
+                    ply.WriteLine("property list uchar int vertex_index");
+                    ply.WriteLine("end_header");
+                    ply.WriteLine("# Vertices");
+                    foreach (ProtoSceneryVertex vertex in vertices)
+                    {
+                        ply.WriteLine("{0} {1} {2} 255 0 255", vertex.X + XOffset, vertex.Y + YOffset, vertex.Z + ZOffset);
+                    }
+                    ply.WriteLine();
+                    ply.WriteLine("# Polygons");
+                    foreach (ProtoSceneryPolygon polygon in polygons)
+                    {
+                        ply.WriteLine("{0} {1} {2} 255 0 255", (polygon.VertexA + 1 + start), (polygon.VertexB + 1 + start), (polygon.VertexC + 1 + start));
                     }
                 }
                 return stream.ToArray();

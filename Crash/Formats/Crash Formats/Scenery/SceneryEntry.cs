@@ -93,7 +93,7 @@ namespace Crash
             return new UnprocessedEntry(items,EID,Type);
         }
 
-        public byte[] ToOBJ()
+        public byte[] ToOBJ(int start = 0)
         {
             using (MemoryStream stream = new MemoryStream())
             {
@@ -116,20 +116,20 @@ namespace Crash
                     obj.WriteLine("# Triangles");
                     foreach (SceneryTriangle triangle in triangles)
                     {
-                        obj.WriteLine("f {0} {1} {2}", triangle.VertexA + 1, triangle.VertexB + 1, triangle.VertexC + 1);
+                        obj.WriteLine("f {0} {1} {2}", (triangle.VertexA + 1 + start), (triangle.VertexB + 1 + start), (triangle.VertexC + 1 + start));
                     }
                     obj.WriteLine();
                     obj.WriteLine("# Quads");
                     foreach (SceneryQuad quad in quads)
                     {
-                        obj.WriteLine("f {0} {1} {2} {3}", quad.VertexA + 1, quad.VertexB + 1, quad.VertexC + 1, quad.VertexD + 1);
+                        obj.WriteLine("f {0} {1} {2} {3}", (quad.VertexA + 1 + start), (quad.VertexB + 1 + start), (quad.VertexC + 1 + start), (quad.VertexD + 1 + start));
                     }
                 }
                 return stream.ToArray();
             }
         }
 
-        public byte[] ToPLY()
+        public byte[] ToPLY(int start = 0)
         {
             using (MemoryStream stream = new MemoryStream())
             {
@@ -178,14 +178,14 @@ namespace Crash
                     {
                         if (triangle.VertexA < vertices.Count - 1 && triangle.VertexB < vertices.Count - 1 && triangle.VertexC < vertices.Count - 1)
                         {
-                            ply.WriteLine("3 {0} {1} {2}", triangle.VertexA, triangle.VertexB, triangle.VertexC);
+                            ply.WriteLine("3 {0} {1} {2}", triangle.VertexA + start, triangle.VertexB + start, triangle.VertexC + start);
                         }
                     }
                     foreach (SceneryQuad quad in quads)
                     {
                         if (quad.VertexA < vertices.Count - 1 && quad.VertexB < vertices.Count - 1 && quad.VertexC < vertices.Count - 1 && quad.VertexD < vertices.Count - 1)
                         {
-                            ply.WriteLine("4 {0} {1} {2} {3}", quad.VertexA, quad.VertexB, quad.VertexC, quad.VertexD);
+                            ply.WriteLine("4 {0} {1} {2} {3}", quad.VertexA + start, quad.VertexB + start, quad.VertexC + start, quad.VertexD + start);
                         }
                     }
                 }

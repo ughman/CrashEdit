@@ -4,3 +4,5 @@
 bin
 obj
 .vs
+Backup[0-9]*
+UpgradeLog.htm
